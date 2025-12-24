@@ -1,1 +1,38 @@
+HR Onboarding – Första perioden på jobbet
 
+Detta projekt är ett lugnt, styrt onboarding-system för nya medarbetare.
+Det används första dagen – och fortsätter användas över tid.
+
+Systemet ska:
+
+visa var man är
+
+visa vad som förväntas
+
+visa vad som är nästa steg
+
+Det är byggt för att kunna växa till ett avancerat HR-system,
+utan att kännas tekniskt, rörigt eller administrativt för användaren.
+
+Viktiga principer
+
+Enkel upplevelse, stark struktur
+
+Styrt flöde – inga genvägar
+
+Byggs stegvis och låses efterhand
+
+Allt ska gå att bygga ut utan ombyggnad
+
+Roller (v1 – låst)
+
+Admin
+
+Medarbetare
+
+Inga fler roller i första versionen.
+
+Status
+
+Projektet är i arkitektur- och metodfas.
+Ingen implementation är påbörjad.
