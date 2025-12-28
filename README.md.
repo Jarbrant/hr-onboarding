@@ -36,3 +36,15 @@ Status
 
 Projektet är i arkitektur- och metodfas.
 Ingen implementation är påbörjad.
+
+AO-001 – Testnotering (manuellt)
+
+Test 1 (Admin-login): Namn valfritt, Anst.nr = 9999, Lösen = admin → routas till #admin.
+
+Test 2 (Medarbetar-login): Namn valfritt, Anst.nr = valfritt ≠ 9999, Lösen = employee → routas till #employee.
+
+Test 3 (Fel lösen): Visar ”Felaktiga inloggningsuppgifter.” och ingen redirect.
+
+Test 4 (Upprepade fel): Efter 5 missar → UI-cooldown 30s (fält + knappar låses, nedräkning visas).
+
+Test 5 (Refresh efter login): Vid refresh ligger du kvar i korrekt vy (sessionStorage-baserad flagga, ingen känslig data sparas).
