@@ -1,1 +1,104 @@
+<!-- ============================================================
+AO-001 | FIL-ID: UI/UI-01-SKELETON.html
+Projekt: HR Onboarding (Stam-login + roll-routing v1)
+Policy: Inga extra roller, ingen PIN (endast hook), ingen backend
+============================================================ -->
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stam-login – HR Onboarding</title>
+  <meta name="description" content="Gemensam inloggning (stam) som routar till rätt vy baserat på roll." />
+
+  <!-- AO-001 | FIL-ID: UI/UI-02-STYLES.css (valfri, minimal) -->
+  <link rel="stylesheet" href="./UI-02-STYLES.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <strong>HR Onboarding</strong>
+      <span class="muted">• Stam-login v1</span>
+    </div>
+    <nav class="nav">
+      <a href="#login" data-nav="login">Login</a>
+      <a href="#admin" data-nav="admin">Admin</a>
+      <a href="#employee" data-nav="employee">Medarbetare</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- LOGIN VIEW -->
+    <section id="view-login" class="card" aria-label="Login">
+      <h1>Logga in</h1>
+      <p class="muted">
+        En ingång för alla roller. Vid inloggning skickas du till rätt vy.
+      </p>
+
+      <form id="loginForm" class="form" novalidate>
+        <label class="field">
+          <span>Namn</span>
+          <input id="inpName" name="name" type="text" autocomplete="username" inputmode="text" />
+        </label>
+
+        <label class="field">
+          <span>Anställningsnummer</span>
+          <input id="inpEmpNo" name="empNo" type="text" autocomplete="username" inputmode="numeric" />
+        </label>
+
+        <label class="field">
+          <span>Lösenord</span>
+          <input id="inpPassword" name="password" type="password" autocomplete="current-password" />
+        </label>
+
+        <div class="row">
+          <button id="btnLogin" type="submit">Logga in</button>
+          <button id="btnReset" type="button" class="secondary">Rensa</button>
+        </div>
+
+        <!-- Generiskt fel (ingen kontoläckage) -->
+        <div id="loginMessage" class="message" role="status" aria-live="polite"></div>
+
+        <!-- V1: ingen glömt-lösen (ingen backend). Tillåten textlänk/info. -->
+        <p class="muted small">
+          Problem att logga in? Kontakta admin.
+        </p>
+      </form>
+    </section>
+
+    <!-- ADMIN VIEW -->
+    <section id="view-admin" class="card" aria-label="Adminvy" hidden>
+      <div class="row space-between">
+        <h1>Adminvy</h1>
+        <button id="btnLogoutAdmin" class="secondary" type="button">Logga ut</button>
+      </div>
+      <p class="muted">
+        Placeholder för admin-gren. (Inga extra funktioner i AO-001.)
+      </p>
+      <div class="box">
+        <div><strong>Inloggad som:</strong> <span id="adminWho"></span></div>
+        <div><strong>Roll:</strong> <span id="adminRole"></span></div>
+      </div>
+    </section>
+
+    <!-- EMPLOYEE VIEW -->
+    <section id="view-employee" class="card" aria-label="Medarbetarvy" hidden>
+      <div class="row space-between">
+        <h1>Medarbetarvy</h1>
+        <button id="btnLogoutEmployee" class="secondary" type="button">Logga ut</button>
+      </div>
+      <p class="muted">
+        Placeholder för medarbetar-gren. (Inga extra funktioner i AO-001.)
+      </p>
+      <div class="box">
+        <div><strong>Inloggad som:</strong> <span id="employeeWho"></span></div>
+        <div><strong>Roll:</strong> <span id="employeeRole"></span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- AO-001 | FIL-ID: UI/UI-03-APP.js -->
+  <script src="./UI-03-APP.js"></script>
+</body>
+</html>
 
