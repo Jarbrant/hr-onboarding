@@ -1,7 +1,12 @@
 /* ============================================================
 AO-002 | FIL-ID: UI/UI-03-APP.js
 Stam-login + roll-routing v1 (admin, employee)
-UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
+UPPDATERING:
+- Employee redirectar till ROOT-gren: ../employee/home.html
+- Stöd för URL-parametrar: ?name=...&empNo=...&password=...
+  - Autofyller login-fält
+  - Auto-login om alla tre finns och name ej tomt
+Policy:
 - Ingen backend (v1)
 - Generiskt fel (ingen kontoläckage)
 - UI-cooldown efter X misslyckade försök
@@ -12,9 +17,6 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
 (function () {
   "use strict";
 
-  // =========================
-  // AO-002: State (låst, minimalt)
-  // =========================
   const APP_STATE = {
     route: "#login",
     auth: {
@@ -22,8 +24,7 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
       role: null,           // "admin" | "employee"
       displayName: null,    // ej känsligt
       empNo: null,          // anställningsnummer (policy: sökbart i v1)
-      pinRequired: false    // AO-001 hook (ingen PIN i v1)
-      // TODO (AO-001): Om pinRequired i framtiden -> route till PIN-vy
+      pinRequired: false    // hook (ingen PIN i v1)
     },
     abuse: {
       attempts: 0,
@@ -31,17 +32,12 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     }
   };
 
-  // AO-001/AO-002: En (1) lagringsnyckel (ingen lösenord)
   const STORAGE_KEY = "AO-001_LOGIN_V1";
   const SESSION_TTL_MS = 6 * 60 * 60 * 1000; // 6h (client only)
 
-  // AO-002: Rate-limit (light, client only)
   const MAX_FAILS = 5;
   const COOLDOWN_MS = 30 * 1000;
 
-  // =========================
-  // DOM
-  // =========================
   const $ = (sel) => document.querySelector(sel);
 
   const viewLogin = $("#view-login");
@@ -64,9 +60,6 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
   const employeeWho = $("#employeeWho");
   const employeeRole = $("#employeeRole");
 
-  // =========================
-  // Helpers
-  // =========================
   function now() { return Date.now(); }
 
   function setNavCurrent(hash) {
@@ -126,7 +119,7 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
-      // Fail-closed: om sessionStorage inte funkar -> kör utan persist
+      // Fail-closed: kör utan persist om sessionStorage inte funkar
     }
   }
 
@@ -158,9 +151,7 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
         APP_STATE.auth.empNo = null;
         APP_STATE.auth.pinRequired = false;
       }
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
   }
 
   function clearState() {
@@ -176,28 +167,42 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
   }
 
-  // =========================
-  // AO-002: Demo-auth (v1, ingen backend)
-  // =========================
-  function demoAuth(name, empNo, password) {
+  // Demo-auth (v1)
+  function demoAuth(empNo, password) {
     // admin: empNo 9999, lösen "admin"
-    // employee: alla andra empNo, lösen "employee"
+    // employee: empNo != 9999, lösen "employee"
     const isAdmin = empNo === "9999" && password === "admin";
     const isEmployee = empNo !== "9999" && password === "employee";
-
     if (isAdmin) return { ok: true, role: "admin" };
     if (isEmployee) return { ok: true, role: "employee" };
     return { ok: false, role: null };
   }
 
-  // =========================
-  // AO-002: Branch redirect (VIKTIGT)
-  // =========================
   function goToEmployeeHome() {
-    // Vi står i UI/ (t.ex. /UI/UI-01-SKELETON.html)
-    // Employee-grenen ligger i repo-root: /employee/home.html
-    // Därför: ../employee/home.html
-    window.location.assign("../employee/home.html#home");
+    // Vi står i UI/ -> employee-grenen ligger i repo-root
+    window.location.assign("../employee/home.html");
+  }
+
+  // URL-parametrar: ?name=&empNo=&password=
+  function getLoginParamsFromUrl() {
+    try {
+      const u = new URL(window.location.href);
+      const sp = u.searchParams;
+      const name = sanitizeText(sp.get("name"));
+      const empNo = sanitizeEmpNo(sp.get("empNo"));
+      const password = String(sp.get("password") || "");
+      const hasAny = !!(sp.has("name") || sp.has("empNo") || sp.has("password"));
+      return { hasAny, name, empNo, password };
+    } catch (e) {
+      return { hasAny: false, name: "", empNo: "", password: "" };
+    }
+  }
+
+  function fillLoginFormFromParams(p) {
+    if (!p || !p.hasAny) return;
+    if (inpName) inpName.value = p.name || "";
+    if (inpEmpNo) inpEmpNo.value = p.empNo || "";
+    if (inpPassword) inpPassword.value = p.password || "";
   }
 
   function render() {
@@ -210,22 +215,17 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     viewAdmin.hidden = true;
     viewEmployee.hidden = true;
 
-    // Guard: ej authed => tvinga login om någon försöker #admin/#employee
     if (!APP_STATE.auth.isAuthed && (hash === "#admin" || hash === "#employee")) {
       window.location.hash = "#login";
       return;
     }
 
-    // Authed: korrigera till rätt branch
     if (APP_STATE.auth.isAuthed) {
       if (APP_STATE.auth.role === "employee") {
-        // Employee ska INTE stanna i login-filen längre -> gå till employee/home.html
         goToEmployeeHome();
         return;
       }
-
       if (APP_STATE.auth.role === "admin") {
-        // Admin stannar kvar i denna fil i v1
         if (hash !== "#admin") {
           window.location.hash = "#admin";
           return;
@@ -241,19 +241,17 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     }
 
     if (hash === "#employee") {
-      // (Säkerhetsnät) Om någon hamnar här manuellt:
+      // säkerhetsnät
       if (APP_STATE.auth.isAuthed && APP_STATE.auth.role === "employee") {
         goToEmployeeHome();
         return;
       }
-      // annars visa placeholder (bör ej ske)
       viewEmployee.hidden = false;
       employeeWho.textContent = APP_STATE.auth.displayName || "—";
       employeeRole.textContent = APP_STATE.auth.role || "—";
       return;
     }
 
-    // Default: login
     viewLogin.hidden = false;
 
     if (isCoolingDown()) {
@@ -286,12 +284,10 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
 
   function bumpFail() {
     APP_STATE.abuse.attempts += 1;
-
     if (APP_STATE.abuse.attempts >= MAX_FAILS) {
       APP_STATE.abuse.cooldownUntil = now() + COOLDOWN_MS;
       APP_STATE.abuse.attempts = 0;
     }
-
     persistState();
   }
 
@@ -307,19 +303,16 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     const empNo = sanitizeEmpNo(inpEmpNo.value);
     const password = String(inpPassword.value || "");
 
+    // kräver name+empNo+password i v1
     if (!name || !empNo || !password) {
       showMessage("err", "Felaktiga inloggningsuppgifter.");
       return;
     }
 
-    const res = demoAuth(name, empNo, password);
-
+    const res = demoAuth(empNo, password);
     if (!res.ok) {
       bumpFail();
-      if (isCoolingDown()) {
-        render();
-        return;
-      }
+      if (isCoolingDown()) { render(); return; }
       showMessage("err", "Felaktiga inloggningsuppgifter.");
       return;
     }
@@ -329,23 +322,18 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     APP_STATE.auth.role = res.role;
     APP_STATE.auth.displayName = name;
     APP_STATE.auth.empNo = empNo;
-
-    // AO-001 hook: PIN ska ej implementeras i v1
-    APP_STATE.auth.pinRequired = false;
-    // TODO (AO-001): Om pinRequired blir true i framtiden -> gå till PIN-steg innan branch-routing.
+    APP_STATE.auth.pinRequired = false; // hook only
+    // TODO (AO-001): PIN-steg senare om pinRequired true.
 
     APP_STATE.abuse.attempts = 0;
     APP_STATE.abuse.cooldownUntil = 0;
 
     persistState();
 
-    // Redirect till rätt branch
     if (res.role === "employee") {
       goToEmployeeHome();
       return;
     }
-
-    // Admin (v1): stanna i samma fil
     window.location.hash = "#admin";
   }
 
@@ -360,6 +348,33 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
     clearState();
     showMessage("", "");
     window.location.hash = "#login";
+  }
+
+  function tryAutoLoginFromUrlParams() {
+    if (APP_STATE.auth.isAuthed) return;
+
+    const p = getLoginParamsFromUrl();
+    if (!p.hasAny) return;
+
+    // Autofyll alltid om params finns
+    fillLoginFormFromParams(p);
+
+    // Auto-login endast om ALLA tre finns och name ej tomt
+    const canAuto = !!(p.name && p.empNo && p.password);
+    if (!canAuto) {
+      // generiskt meddelande utan kontoläckage
+      showMessage("err", "Felaktiga inloggningsuppgifter.");
+      return;
+    }
+
+    // Försök auto-submit (respektera cooldown)
+    if (isCoolingDown()) {
+      render();
+      return;
+    }
+
+    // Syntetiskt submit (använder samma validering/logik)
+    onLoginSubmit({ preventDefault: function () {} });
   }
 
   function init() {
@@ -378,11 +393,15 @@ UPPDATERING: Employee ska redirecta till ROOT-gren: ../employee/home.html
       goToEmployeeHome();
       return;
     }
+
     if (!window.location.hash) window.location.hash = "#login";
 
     render();
+
+    // Efter första render: prova URL-parametrar
+    // (så att inputfält finns och UI-meddelanden syns)
+    tryAutoLoginFromUrlParams();
   }
 
   init();
 })();
-
