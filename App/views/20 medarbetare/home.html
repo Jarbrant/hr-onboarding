@@ -1,18 +1,18 @@
 <!-- ============================================================
 AO-002 | FIL-ID: employee/home.html
 Projekt: HR Onboarding
-Syfte: Medarbetarens startsida (Dashboard + navigation) – UI-only v1
+Syfte: Ren medarbetar-start (Dashboard) – UI-only v1
 Policy:
 - Ingen backend (v1)
-- Fejkdata tillåten men tydligt märkt "demo"
-- Ingen lagring av känslig data
+- Fejkdata ok men tydligt "demo"
+- Ingen känslig data lagras
 ============================================================ -->
 <!doctype html>
 <html lang="sv">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Medarbetare – Min sida</title>
+  <title>Medarbetare – Hem</title>
   <meta name="description" content="Medarbetarens dashboard: uppgifter, frågor, schema, dokument, rapportera fel." />
 
   <!-- Återanvänd samma CSS som stammen -->
@@ -24,13 +24,15 @@ Policy:
       <strong>HR Onboarding</strong>
       <span class="muted">• Medarbetare</span>
     </div>
-    <nav class="nav" aria-label="Snabbnavigation">
-      <a href="#home" data-subnav="home">Hem</a>
-      <a href="#tasks" data-subnav="tasks">Uppgifter</a>
-      <a href="#questions" data-subnav="questions">Frågor</a>
-      <a href="#schedule" data-subnav="schedule">Schema</a>
-      <a href="#docs" data-subnav="docs">Dokument</a>
-      <a href="#report" data-subnav="report">Rapportera fel</a>
+
+    <!-- Ren nav: separata sidor -->
+    <nav class="nav" aria-label="Meny">
+      <a href="./home.html" aria-current="page">Hem</a>
+      <a href="./tasks.html">Uppgifter</a>
+      <a href="./questions.html">Frågor</a>
+      <a href="./schedule.html">Schema</a>
+      <a href="./docs.html">Dokument</a>
+      <a href="./report.html">Rapportera fel</a>
     </nav>
   </header>
 
@@ -45,264 +47,91 @@ Policy:
         </div>
 
         <div class="row wrap">
-          <a class="btn secondary" href="#report">Rapportera fel</a>
-          <a class="btn secondary" href="#profile">Min sida</a>
+          <a class="btn secondary" href="./report.html">Rapportera fel</a>
+          <a class="btn secondary" href="./profile.html">Min sida</a>
           <button id="btnLogout" class="secondary" type="button">Logga ut</button>
         </div>
       </div>
 
-      <!-- ROUTE: HOME -->
-      <section id="route-home" class="emp-route" aria-label="Hem">
-        <div class="grid-cards">
-          <a class="bigcard" href="#tasks">
-            <div class="bigcard-title">Uppgifter</div>
-            <div class="muted">3 att göra idag <span class="tag">demo</span></div>
-          </a>
+      <!-- Stora rutor / navigation -->
+      <div class="grid-cards">
+        <a class="bigcard" href="./tasks.html">
+          <div class="bigcard-title">Uppgifter</div>
+          <div class="muted">3 att göra idag <span class="tag">demo</span></div>
+        </a>
 
-          <a class="bigcard" href="#questions">
-            <div class="bigcard-title">Frågor</div>
-            <div class="muted">2 nya från chef <span class="tag">demo</span></div>
-          </a>
+        <a class="bigcard" href="./questions.html">
+          <div class="bigcard-title">Frågor</div>
+          <div class="muted">2 nya från chef <span class="tag">demo</span></div>
+        </a>
 
-          <a class="bigcard" href="#schedule">
-            <div class="bigcard-title">Schema</div>
-            <div class="muted">Nästa pass: tis 07:00 <span class="tag">demo</span></div>
-          </a>
+        <a class="bigcard" href="./schedule.html">
+          <div class="bigcard-title">Schema</div>
+          <div class="muted">Nästa pass: tis 07:00 <span class="tag">demo</span></div>
+        </a>
 
-          <a class="bigcard" href="#docs">
-            <div class="bigcard-title">Dokument</div>
-            <div class="muted">1 policy att kvittera <span class="tag">demo</span></div>
-          </a>
+        <a class="bigcard" href="./docs.html">
+          <div class="bigcard-title">Dokument</div>
+          <div class="muted">1 policy att kvittera <span class="tag">demo</span></div>
+        </a>
 
-          <a class="bigcard" href="#report">
-            <div class="bigcard-title">Rapportera fel</div>
-            <div class="muted">Skicka fel med teknisk info</div>
-          </a>
+        <a class="bigcard" href="./report.html">
+          <div class="bigcard-title">Rapportera fel</div>
+          <div class="muted">Skicka fel med teknisk info</div>
+        </a>
 
-          <a class="bigcard" href="#profile">
-            <div class="bigcard-title">Min sida</div>
-            <div class="muted">Profil & byt lösenord (placeholder)</div>
-          </a>
-        </div>
+        <a class="bigcard" href="./profile.html">
+          <div class="bigcard-title">Min sida</div>
+          <div class="muted">Profil & byt lösenord (placeholder)</div>
+        </a>
+      </div>
 
-        <div class="dashgrid">
-          <section class="panel" aria-label="Dagens uppgifter">
-            <div class="panel-title">Dagens uppgifter <span class="tag">demo</span></div>
-            <ul class="list">
-              <li><span>Check-in (2 min)</span><span class="pill">Ej startad</span></li>
-              <li><span>Läs rutin: Hygien</span><span class="pill">Pågår</span></li>
-              <li><span>Bekräfta leverans</span><span class="pill">Ej startad</span></li>
-            </ul>
-            <a class="link" href="#tasks">Visa alla →</a>
-          </section>
-
-          <section class="panel" aria-label="Väntar på svar">
-            <div class="panel-title">Väntar på svar <span class="tag">demo</span></div>
-            <ul class="list">
-              <li><span>Hur gick första veckan?</span><span class="pill">Svar krävs</span></li>
-              <li><span>Har du rätt verktyg?</span><span class="pill">Svar krävs</span></li>
-            </ul>
-            <a class="link" href="#questions">Öppna frågor →</a>
-          </section>
-
-          <section class="panel" aria-label="Notiser">
-            <div class="panel-title">Notiser <span class="tag">demo</span></div>
-            <ul class="list">
-              <li><span>Nytt arbetssätt i kassan</span><span class="pill">Info</span></li>
-              <li><span>Möte: måndag 09:00</span><span class="pill">Info</span></li>
-            </ul>
-            <span class="muted small">Read-only i v1.</span>
-          </section>
-
-          <section class="panel" aria-label="Att kvittera">
-            <div class="panel-title">Att kvittera <span class="tag">demo</span></div>
-            <ul class="list">
-              <li><span>Policy: Arbetsmiljö</span><span class="pill">Kvittera</span></li>
-              <li><span>Rutin: Städcheck</span><span class="pill">Kvittera</span></li>
-            </ul>
-            <a class="link" href="#docs">Öppna dokument →</a>
-          </section>
-        </div>
-      </section>
-
-      <!-- ROUTE: TASKS -->
-      <section id="route-tasks" class="emp-route" aria-label="Uppgifter" hidden>
-        <div class="routehead">
-          <h2>Uppgifter <span class="tag">demo</span></h2>
-          <div class="muted">Markera klar / lämna enkel kommentar (UI-only i v1).</div>
-        </div>
-
-        <div class="panel">
+      <!-- Dashboard-paneler -->
+      <div class="dashgrid">
+        <section class="panel" aria-label="Dagens uppgifter">
+          <div class="panel-title">Dagens uppgifter <span class="tag">demo</span></div>
           <ul class="list">
-            <li class="stack">
-              <div><strong>Check-in</strong> <span class="muted">• 2 min</span></div>
-              <div class="muted small">Bekräfta att du är redo för dagens pass.</div>
-              <div class="row wrap">
-                <button class="secondary" type="button" data-demo-action="done">Markera klar</button>
-                <input class="inline" type="text" placeholder="Kommentar (demo)" />
-              </div>
-            </li>
-
-            <li class="stack">
-              <div><strong>Läs rutin: Hygien</strong></div>
-              <div class="muted small">Öppna dokumentet och kvittera “läst”.</div>
-              <div class="row wrap">
-                <button class="secondary" type="button" data-demo-action="goto-docs">Gå till dokument</button>
-              </div>
-            </li>
-
-            <li class="stack">
-              <div><strong>Bekräfta leverans</strong></div>
-              <div class="muted small">Bekräfta att du tagit emot varor (placeholder).</div>
-              <div class="row wrap">
-                <button class="secondary" type="button" data-demo-action="done">Markera klar</button>
-              </div>
-            </li>
+            <li><span>Check-in (2 min)</span><span class="pill">Ej startad</span></li>
+            <li><span>Läs rutin: Hygien</span><span class="pill">Pågår</span></li>
+            <li><span>Bekräfta leverans</span><span class="pill">Ej startad</span></li>
           </ul>
-        </div>
-      </section>
+          <a class="link" href="./tasks.html">Visa alla →</a>
+        </section>
 
-      <!-- ROUTE: QUESTIONS -->
-      <section id="route-questions" class="emp-route" aria-label="Frågor" hidden>
-        <div class="routehead">
-          <h2>Frågor & svar <span class="tag">demo</span></h2>
-          <div class="muted">Chef kan skicka frågor. Du svarar. (UI-only i v1.)</div>
-        </div>
-
-        <div class="panel">
-          <div class="stack">
-            <div><strong>Hur gick första veckan?</strong></div>
-            <textarea class="textarea" rows="4" placeholder="Skriv ditt svar (demo)"></textarea>
-            <div class="row wrap">
-              <button class="secondary" type="button" data-demo-action="send-answer">Skicka svar</button>
-              <span class="muted small">Ska senare gå till Chef + Admin.</span>
-            </div>
-          </div>
-
-          <hr class="sep" />
-
-          <div class="stack">
-            <div><strong>Har du rätt verktyg och behörigheter?</strong></div>
-            <textarea class="textarea" rows="4" placeholder="Skriv ditt svar (demo)"></textarea>
-            <div class="row wrap">
-              <button class="secondary" type="button" data-demo-action="send-answer">Skicka svar</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ROUTE: SCHEDULE -->
-      <section id="route-schedule" class="emp-route" aria-label="Schema" hidden>
-        <div class="routehead">
-          <h2>Schema <span class="tag">demo</span></h2>
-          <div class="muted">Läs-läge räcker i början.</div>
-        </div>
-
-        <div class="panel">
+        <section class="panel" aria-label="Väntar på svar">
+          <div class="panel-title">Väntar på svar <span class="tag">demo</span></div>
           <ul class="list">
-            <li><span>Tis 07:00–15:00</span><span class="pill">Kommande</span></li>
-            <li><span>Ons 07:00–15:00</span><span class="pill">Kommande</span></li>
-            <li><span>Fre 12:00–20:00</span><span class="pill">Kommande</span></li>
+            <li><span>Hur gick första veckan?</span><span class="pill">Svar krävs</span></li>
+            <li><span>Har du rätt verktyg?</span><span class="pill">Svar krävs</span></li>
           </ul>
-        </div>
-      </section>
+          <a class="link" href="./questions.html">Öppna frågor →</a>
+        </section>
 
-      <!-- ROUTE: DOCS -->
-      <section id="route-docs" class="emp-route" aria-label="Dokument" hidden>
-        <div class="routehead">
-          <h2>Dokument <span class="tag">demo</span></h2>
-          <div class="muted">Läs policyer/rutiner, kvittera “läst”. (UI-only i v1.)</div>
-        </div>
-
-        <div class="panel">
+        <section class="panel" aria-label="Notiser">
+          <div class="panel-title">Notiser <span class="tag">demo</span></div>
           <ul class="list">
-            <li class="stack">
-              <div><strong>Policy: Arbetsmiljö</strong></div>
-              <div class="muted small">Kort sammanfattning…</div>
-              <div class="row wrap">
-                <button class="secondary" type="button" data-demo-action="read">Markera läst</button>
-              </div>
-            </li>
-            <li class="stack">
-              <div><strong>Rutin: Städcheck</strong></div>
-              <div class="muted small">Kort sammanfattning…</div>
-              <div class="row wrap">
-                <button class="secondary" type="button" data-demo-action="read">Markera läst</button>
-              </div>
-            </li>
+            <li><span>Nytt arbetssätt i kassan</span><span class="pill">Info</span></li>
+            <li><span>Möte: måndag 09:00</span><span class="pill">Info</span></li>
           </ul>
-        </div>
-      </section>
+          <span class="muted small">Read-only i v1.</span>
+        </section>
 
-      <!-- ROUTE: REPORT -->
-      <section id="route-report" class="emp-route" aria-label="Rapportera fel" hidden>
-        <div class="routehead">
-          <h2>Rapportera fel</h2>
-          <div class="muted">Sida + språk + roll + teknisk info + text. (UI-only i v1.)</div>
-        </div>
-
-        <div class="panel">
-          <form id="reportForm" class="form">
-            <label class="field">
-              <span>Beskriv felet</span>
-              <textarea id="reportText" class="textarea" rows="5" placeholder="Beskriv vad som hände…"></textarea>
-            </label>
-
-            <div class="box">
-              <div class="muted small"><strong>Teknisk info (auto):</strong></div>
-              <pre class="muted small" id="techInfo" style="margin:8px 0 0; white-space:pre-wrap;"></pre>
-            </div>
-
-            <div class="row wrap">
-              <button class="secondary" type="submit">Skicka rapport (demo)</button>
-              <span class="muted small" id="reportStatus"></span>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <!-- ROUTE: PROFILE -->
-      <section id="route-profile" class="emp-route" aria-label="Min sida" hidden>
-        <div class="routehead">
-          <h2>Min sida</h2>
-          <div class="muted">Profil & säkerhet. Byt lösenord är UI-only i v1.</div>
-        </div>
-
-        <div class="panel">
-          <div class="box">
-            <div><strong>Namn:</strong> <span id="pName">—</span></div>
-            <div><strong>Anställningsnummer:</strong> <span id="pEmp">—</span></div>
-            <div><strong>Roll:</strong> <span id="pRole">employee</span></div>
-          </div>
-
-          <div class="stack">
-            <h3 class="tight">Byt lösenord <span class="tag">placeholder</span></h3>
-            <div class="muted small">Kräver backend för att vara korrekt och säkert.</div>
-
-            <label class="field">
-              <span>Nuvarande lösenord</span>
-              <input type="password" autocomplete="current-password" />
-            </label>
-            <label class="field">
-              <span>Nytt lösenord</span>
-              <input type="password" autocomplete="new-password" />
-            </label>
-            <label class="field">
-              <span>Bekräfta nytt lösenord</span>
-              <input type="password" autocomplete="new-password" />
-            </label>
-
-            <div class="row wrap">
-              <button class="secondary" type="button" data-demo-action="change-password">Spara (demo)</button>
-              <span class="muted small" id="pwStatus"></span>
-            </div>
-          </div>
-        </div>
-      </section>
+        <section class="panel" aria-label="Att kvittera">
+          <div class="panel-title">Att kvittera <span class="tag">demo</span></div>
+          <ul class="list">
+            <li><span>Policy: Arbetsmiljö</span><span class="pill">Kvittera</span></li>
+            <li><span>Rutin: Städcheck</span><span class="pill">Kvittera</span></li>
+          </ul>
+          <a class="link" href="./docs.html">Öppna dokument →</a>
+        </section>
+      </div>
     </section>
   </main>
 
-  <!-- AO-002 | FIL-ID: employee/employee.js -->
+  <!-- AO-002 | FIL-ID: employee/employee.js
+       OBS: Din nuvarande employee.js är byggd för hash-routes och kommer behöva uppdateras.
+       Jag levererar en ny "gren-guard" i nästa steg som passar separata sidor.
+  -->
   <script src="./employee.js"></script>
 </body>
 </html>
